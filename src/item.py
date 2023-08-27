@@ -18,12 +18,18 @@ class Item:
         self.quantity = quantity
         self.all.append(self)
 
+    def __repr__(self):
+        return f"Item('{self.get_name()}', {self.price}, {self.quantity})"
+
+    def __str__(self):
+        return self.get_name()
+
     def get_name(self):
         return self._name
 
     def set_name(self, name):
         if len(name) < 10:
-                self._name = name
+            self._name = name
 
     def calculate_total_price(self) -> float:
         """
@@ -40,7 +46,7 @@ class Item:
         self.price = self.price * self.pay_rate
 
     def instantiate_from_csv():
-        with open ("../src/items.csv",'r',encoding='cp1251') as file:
+        with open("../src/items.csv", 'r', encoding='cp1251') as file:
             file = file.readlines()
             for line in file[1:]:
                 line = line.strip().split(',')
