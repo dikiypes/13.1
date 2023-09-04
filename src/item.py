@@ -1,3 +1,10 @@
+class InstantiateCSVError(Exception):
+    def __init__(self, message="Файл item.csv поврежден"):
+        self.message = message
+        super().__init__(self.message)
+
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -45,15 +52,20 @@ class Item:
         """
         self.price = self.price * self.pay_rate
 
-    def instantiate_from_csv():
-        with open("../src/items.csv", 'r', encoding='cp1251') as file:
-            file = file.readlines()
-            for line in file[1:]:
-                line = line.strip().split(',')
-                name = line[0]
-                price = float(line[1])
-                quantity = int(line[2])
-                Item(name, price, quantity)
+    def instantiate_from_csv(file_anme = "../src/items.csv"):
+        try:
+            with open(file_anme, 'r', encoding='cp1251') as file:
+                file = file.readlines()
+                for line in file[1:]:
+                    line = line.strip().split(',')
+                    if len(line) < 3:
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+                    name = line[0]
+                    price = float(line[1])
+                    quantity = int(line[2])
+                    Item(name, price, quantity)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Отсутствует файл {file_anme}")
 
     @staticmethod
     def string_to_number(string):
